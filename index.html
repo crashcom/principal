@@ -330,6 +330,24 @@
 .botoes .botao {
   width: auto;
 }
+
+    /* Libera o fundo da seção Trabalhos */
+#trabalhos::after {
+  display: none;
+}
+
+/* Garante que a imagem apareça */
+#trabalhos {
+  background-image:
+    linear-gradient(
+      rgba(244, 244, 247, 0.92),
+      rgba(244, 244, 247, 0.92)
+    ),
+    url('1536x1024ima2.png');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
     
   </style>
 </head>
@@ -413,5 +431,6 @@
 
 </body>
 </html>
+
 
 
