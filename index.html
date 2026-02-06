@@ -2,23 +2,21 @@
 <html lang="pt-br">
 <head>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BTJ9XC5PWR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BTJ9XC5PWR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BTJ9XC5PWR');
+  </script>
 
-  gtag('config', 'G-BTJ9XC5PWR');
-</script>
-  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crash Comunicação</title>
 
-<!-- Favicon -->
+  <!-- Favicon -->
   <link rel="icon" href="crashico373x593.png" type="image/png">
-
 
   <style>
     :root {
@@ -37,19 +35,20 @@
     }
 
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background: var(--cinza);
       color: var(--texto);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
+    /* HEADER */
     header {
       background: var(--roxo);
       padding: 12px 16px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -67,22 +66,20 @@
       font-size: 14px;
     }
 
+    /* SECTIONS */
     section {
       padding: 48px 20px;
       position: relative;
-      overflow: hidden;
     }
 
-    section::after {
+    /* Overlay padrão só para sections comuns */
+    section:not(#trabalhos)::after {
       content: "";
       background: url('crashico373x593.png') no-repeat center;
       background-size: contain;
       opacity: 0.04;
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       pointer-events: none;
     }
 
@@ -91,23 +88,21 @@
       margin-bottom: 16px;
     }
 
+    /* QUEM SOMOS */
     .quem-somos p {
       margin-bottom: 16px;
       max-width: 600px;
     }
 
-    .imagem {
-      margin-top: 24px;
-    }
-
     .imagem img {
       width: 100%;
       max-width: 420px;
-      margin: 0 auto;
       display: block;
+      margin: 0 auto;
       border-radius: 16px;
     }
 
+    /* FRASE */
     .frase {
       background: var(--roxo);
       color: var(--branco);
@@ -117,12 +112,25 @@
       font-weight: bold;
     }
 
+    /* TRABALHOS — FUNDO CORRETO */
+    #trabalhos {
+      background-image:
+        linear-gradient(
+          rgba(244, 244, 247, 0.92),
+          rgba(244, 244, 247, 0.92)
+        ),
+        url('1536x1024ima2.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* SERVIÇOS */
     .servicos {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
       margin-top: 24px;
-      width: 100%;
     }
 
     .servico {
@@ -132,8 +140,8 @@
       text-align: center;
       box-shadow: 0 6px 16px rgba(0,0,0,0.05);
       font-size: 13px;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
+      text-decoration: none;
+      color: inherit;
     }
 
     .servico span {
@@ -143,10 +151,7 @@
       color: var(--laranja);
     }
 
-.servicos a.servico {
-  text-decoration: none;
-  color: inherit;
-}
+    /* CONTATO */
     .contato {
       text-align: center;
     }
@@ -155,20 +160,22 @@
       margin-top: 24px;
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 16px;
     }
 
     .botao {
       background: var(--laranja);
       color: var(--branco);
-      padding: 16px;
-      border-radius: 30px;
+      padding: 12px 24px;
+      border-radius: 24px;
       text-decoration: none;
       font-weight: bold;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      width: auto;
     }
 
     .botao.email {
@@ -176,6 +183,7 @@
       color: var(--texto);
     }
 
+    /* FOOTER */
     footer {
       background: var(--roxo);
       color: var(--branco);
@@ -184,6 +192,12 @@
       font-size: 14px;
     }
 
+    footer a {
+      color: var(--amarelo);
+      text-decoration: none;
+    }
+
+    /* DESKTOP */
     @media (min-width: 768px) {
       header img {
         height: 50px;
@@ -194,190 +208,18 @@
       }
 
       .quem-somos {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .quem-texto {
-      flex: 1;
-    }
-
-    .quem-imagem {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-    }
-
-    @media (min-width: 768px) {
-      .quem-somos {
-        flex-direction: row;
-        align-items: center;
-        gap: 48px;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .quem-somos {
-        flex-direction: row;
-        align-items: center;
-        gap: 40px;
-      }
-    }
-
-      .quem-somos p {
-        max-width: 500px;
-      }
-
-      .imagem img {
-        max-width: 320px;
-      }
-    }
-
-      nav a {
-        font-size: 16px;
-      }
-
-      .quem-somos {
         display: flex;
-        gap: 40px;
+        gap: 48px;
         align-items: center;
-      }
-
-      .quem-somos p {
-        max-width: 500px;
-      }
-
-      .imagem img {
-        max-width: 320px;
       }
 
       .servicos {
         grid-template-columns: repeat(6, 1fr);
       }
-    
-
-      nav a {
-        font-size: 16px;
-      }
-
-      .quem-somos {
-        display: flex;
-        gap: 40px;
-        align-items: center;
-      }
-
-      .quem-somos p {
-        max-width: 500px;
-      }
-
-      .imagem img {
-        max-width: 320px;
-      }
-    
-
-      nav a {
-        font-size: 16px;
-      }
-
-      .quem-somos {
-        display: flex;
-        gap: 40px;
-        align-items: center;
-      }
-
-      .quem-somos p {
-        max-width: 500px;
-      }
-
-/* FUNDO DA SEÇÃO O QUE FAZEMOS */
-
-#trabalhos {
-  background: 
-    linear-gradient(
-      rgba(244, 244, 247, 0.92),
-      rgba(244, 244, 247, 0.92)
-    ),
-    url('1536x1024ima2.png') center / cover no-repeat;
-}
-
-/* Ajuste de tamanho dos botões de contato */
-.botoes .botao {
-  padding: 12px 20px;
-  font-size: 14px;
-  border-radius: 24px;
-}
-
-/* Impede os botões de ocupar a largura toda */
-.botoes {
-  align-items: center;
-}
-
-.botoes .botao {
-  width: auto;
-}
-
-/* Correção de grid da seção Trabalhos */
-.servicos {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-@media (min-width: 768px) {
-  .servicos {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-    /* ================================
-   FUNDO DA SEÇÃO O QUE FAZEMOS
-================================ */
-
-/* remove o overlay padrão do raio */
-#trabalhos::after {
-  display: none;
-}
-
-/* aplica o fundo corretamente */
-#trabalhos {
-  background-image:
-    linear-gradient(
-      rgba(244, 244, 247, 0.92),
-      rgba(244, 244, 247, 0.92)
-    ),
-    url('1536x1024ima2.png');
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-/* ================================
-   FUNDO DA SEÇÃO O QUE FAZEMOS
-================================ */
-
-/* remove o overlay padrão só dessa seção */
-#trabalhos::after {
-  display: none;
-}
-
-/* aplica o fundo */
-#trabalhos {
-  background-image:
-    linear-gradient(
-      rgba(244, 244, 247, 0.92),
-      rgba(244, 244, 247, 0.92)
-    ),
-    url('1536x1024ima2.png');
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-    
-  </style>  
-    
-
+    }
+  </style>
 </head>
+
 <body>
 
 <header>
@@ -391,73 +233,58 @@
 
 <main id="topo">
 
-<section id="quem" class="quem-somos">
-  <div class="quem-texto">
-    <h1>Quem Somos</h1>
-    <p><strong>A Crash Comunicação</strong> é uma agência que adora o poder da conexão.</p>
-    <p>Há mais de duas décadas, nossa missão é ajudar marcas a comunicarem suas histórias de forma clara, criativa e impactante, seja através de assessoria de imprensa, redes sociais ou materiais digitais e impressos.</p>
-  </div>
-  <div class="imagem quem-imagem">
-    <img src="redessociais960x960.jpg" alt="Redes sociais">
-  </div>
-</section>
+  <section id="quem" class="quem-somos">
+    <div>
+      <h1>Quem Somos</h1>
+      <p><strong>A Crash Comunicação</strong> é uma agência que adora o poder da conexão.</p>
+      <p>Há mais de duas décadas, ajudamos marcas a contarem suas histórias com clareza, criatividade e impacto.</p>
+    </div>
+    <div class="imagem">
+      <img src="redessociais960x960.jpg" alt="Redes sociais">
+    </div>
+  </section>
 
-<div class="frase">Nós deixamos a sua marca mais bonita.</div>
+  <div class="frase">Nós deixamos a sua marca mais bonita.</div>
 
-<section id="trabalhos">
-  <h2>O Que Fazemos</h2>
+  <section id="trabalhos">
+    <h2>O Que Fazemos</h2>
 
-  <div class="servicos">
-  <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank" rel="noopener">
-    <span>📢</span>Assessoria de Imprensa
-  </a>
+    <div class="servicos">
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">📢 Assessoria de Imprensa</a>
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">✍️ Elaboração de Release</a>
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">🚀 Disparo de Releases</a>
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">✂️ Clipping</a>
+      <div class="servico">📄 Panfletos</div>
+      <div class="servico">📊 Apresentações</div>
+      <div class="servico">📖 E-book</div>
+      <a href="https://emkt.crashcom.com.br" class="servico" target="_blank">📧 E-mail Marketing</a>
+      <div class="servico">📱 Redes Sociais</div>
+      <div class="servico">🍱 Cardápios / Catálogos</div>
+      <div class="servico">📇 Cartão de Visita</div>
+      <div class="servico">🖋️ Assinatura de E-mail</div>
+    </div>
+  </section>
 
-  <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank" rel="noopener">
-    <span>✍️</span>Elaboração de Release
-  </a>
+  <section id="contato" class="contato">
+    <h2>Contato</h2>
+    <p>Vamos conversar sobre o seu projeto?</p>
 
-  <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank" rel="noopener">
-    <span>🚀</span>Disparo de Releases
-  </a>
-
-  <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank" rel="noopener">
-    <span>✂️</span>Clipping
-  </a>
-
-  <div class="servico"><span>📄</span>Panfletos</div>
-  <div class="servico"><span>📊</span>Apresentações</div>
-  <div class="servico"><span>📖</span>E-book</div>
-
-<a href="https://emkt.crashcom.com.br" class="servico" target="_blank" rel="noopener">
-    <span>📧</span>E-mail marketing
-  </a>
- 
-  <div class="servico"><span>📱</span>Redes Sociais</div>
-  <div class="servico"><span>🍱</span>Cardápio / Catálogo</div>
-  <div class="servico"><span>📇</span>Cartão de Visita</div>
-  <div class="servico"><span>🖋️</span>Assinatura de E-mail</div>
-</div>
-
-</section>
-
-<section id="contato" class="contato">
-  <h2>Contato</h2>
-  <p>Vamos conversar sobre o seu projeto?</p>
-
-  <div class="botoes">
-    <a class="botao" href="https://wa.me/5511963666564" target="_blank">💬 WhatsApp</a>
-    <a class="botao email" href="mailto:contato@crashcom.com.br">✉️ E-mail</a>
-  </div>
-</section>
+    <div class="botoes">
+      <a class="botao" href="https://wa.me/5511963666564" target="_blank">💬 WhatsApp</a>
+      <a class="botao email" href="mailto:contato@crashcom.com.br">✉️ E-mail</a>
+    </div>
+  </section>
 
 </main>
 
 <footer>
-  © Crash Comunicação • Conexão que gera impacto |  <a href="/privacidade">Política de Privacidade</a>
+  © Crash Comunicação • Conexão que gera impacto |
+  <a href="/privacidade">Política de Privacidade</a>
 </footer>
 
 </body>
 </html>
+
 
 
 
