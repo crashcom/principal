@@ -289,15 +289,10 @@
         max-width: 500px;
       }
 
-    /* ================================
-   SEÇÃO O QUE FAZEMOS – FUNDO
-================================ */
-#trabalhos::after {
-  display: none;
-}
+  /* FUNDO DA SEÇÃO O QUE FAZEMOS */
 
 #trabalhos {
-  background:
+  background: 
     linear-gradient(
       rgba(244, 244, 247, 0.92),
       rgba(244, 244, 247, 0.92)
@@ -305,10 +300,23 @@
     url('1536x1024ima2.png') center / cover no-repeat;
 }
 
+/* Ajuste de tamanho dos botões de contato */
+.botoes .botao {
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 24px;
+}
 
-/* ================================
-   GRID RESPONSIVO DOS SERVIÇOS
-================================ */
+/* Impede os botões de ocupar a largura toda */
+.botoes {
+  align-items: center;
+}
+
+.botoes .botao {
+  width: auto;
+}
+
+/* Correção de grid da seção Trabalhos */
 .servicos {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -319,35 +327,6 @@
   }
 }
 
-
-/* ================================
-   BOTÕES DE CONTATO (SEM FULL WIDTH)
-================================ */
-.botoes {
-  align-items: center;
-}
-
-.botoes .botao {
-  width: auto;
-}
-
-    /* Libera o fundo da seção Trabalhos */
-#trabalhos::after {
-  display: none;
-}
-
-/* Garante que a imagem apareça */
-#trabalhos {
-  background-image:
-    linear-gradient(
-      rgba(244, 244, 247, 0.92),
-      rgba(244, 244, 247, 0.92)
-    ),
-    url('1536x1024ima2.png');
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
     
   </style>
 </head>
@@ -431,6 +410,7 @@
 
 </body>
 </html>
+
 
 
 
