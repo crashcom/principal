@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crash Comunicação</title>
+
+  <link rel="icon" href="crashico373x593.png" type="image/png">
+
+  <style>
+    :root {
+      --roxo: #7a75b5;
+      --laranja: #f58634;
+      --amarelo: #ffc10a;
+      --branco: #ffffff;
+      --cinza: #f4f4f7;
+      --texto: #2b2b2b;
+      --overlay: rgba(122, 117, 181, 0.85); /* Roxo com transparência */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--cinza);
+      color: var(--texto);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header Modernizado */
+    header {
+      background: rgba(122, 117, 181, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header img {
+      height: 45px;
+      transition: transform 0.3s;
+    }
+
+    header img:hover {
+      transform: scale(1.05);
+    }
+
+    nav a {
+      color: var(--branco);
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    nav a:hover {
+      color: var(--amarelo);
+    }
+
+    /* Estilo Base das Seções com Imagem de Fundo */
+    section {
+      padding: 80px 10%;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed; /* Efeito Parallax */
+    }
+
+    /* Seção Quem Somos */
+    .hero-section {
+      background-image: linear-gradient(to right, var(--branco) 50%, rgba(255,255,255,0.8) 100%), url('1280x816quadro.jpg');
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .quem-texto {
+      max-width: 600px;
+      z-index: 2;
+    }
+
+    h1, h2 {
+      color: var(--roxo);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    /* O Raio como detalhe no título */
+    h1::after, h2::after {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: url('crashico373x593.png') no-repeat center;
+      background-size: contain;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    /* Faixa de Frase */
+    .frase {
+      background: var(--roxo);
+      background-image: linear-gradient(45deg, var(--roxo), #928dca);
+      color: var(--branco);
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+    }
+
+    /* Seção Serviços */
+    #trabalhos {
+      background-image: linear-gradient(var(--overlay), var(--overlay)), url('1536x1024ima2.png');
+      color: var(--branco);
+    }
+
+    #trabalhos h2 { color: var(--amarelo); }
+
+    .servicos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .servico {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 25px 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--branco);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-weight: 500;
+    }
+
+    .servico:hover {
+      background: var(--laranja);
+      transform: translateY(-5px);
+      border-color: var(--laranja);
+    }
+
+    .servico span {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* Seção Contato */
+    .contato {
+      background-image: linear-gradient(rgba(244, 244, 247, 0.9), rgba(244, 244, 247, 0.9)), url('redes2960x960.jpg');
+      text-align: center;
+    }
+
+    .botoes {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .botao {
+      padding: 18px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .botao:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .whatsapp { background: #25d366; color: white; }
+    .email-btn { background: var(--laranja); color: white; }
+
+    footer {
+      background: #1a1a1a;
+      color: #888;
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 14px;
+    }
+
+    footer a { color: var(--roxo); text-decoration: none; }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      section { padding: 60px 5%; background-attachment: scroll; }
+      .hero-section { background-image: white; text-align: center; }
+      h1 { font-size: 2rem; }
+      .servicos { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="#topo">
+    <img src="logo.png" alt="Crash Comunicação">
+  </a>
+  <nav>
+    <a href="#quem">Quem Somos</a>
+    <a href="#trabalhos">Serviços</a>
+    <a href="#contato">Contato</a>
+  </nav>
+</header>
+
+<main id="topo">
+
+  <section id="quem" class="hero-section">
+    <div class="quem-texto">
+      <h1>Quem Somos</h1>
+      <p><strong>A Crash Comunicação</strong> é uma agência que adora o poder da conexão.</p>
+      <p>Há mais de duas décadas, nossa missão é ajudar marcas a comunicarem suas histórias de forma clara, criativa e impactante.</p>
+    </div>
+  </section>
+
+  <div class="frase">Nós deixamos a sua marca mais bonita.</div>
+
+  <section id="trabalhos">
+    <center><h2>O Que Fazemos</h2></center>
+
+    <div class="servicos">
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">
+        <span>📢</span>Assessoria de Imprensa
+      </a>
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">
+        <span>✍️</span>Elaboração de Release
+      </a>
+      <a href="https://imprensa.crashcom.com.br" class="servico" target="_blank">
+        <span>🚀</span>Disparo de Releases
+      </a>
+      <a href="https://emkt.crashcom.com.br" class="servico" target="_blank">
+        <span>📧</span>E-mail marketing
+      </a>
+      <div class="servico"><span>📱</span>Redes Sociais</div>
+      <div class="servico"><span>📊</span>Apresentações</div>
+      <div class="servico"><span>📖</span>E-book</div>
+      <div class="servico"><span>🍱</span>Cardápio / Catálogo</div>
+      <div class="servico"><span>📇</span>Cartão de Visita</div>
+      <div class="servico"><span>🖋️</span>Assinatura de E-mail</div>
+    </div>
+  </section>
+
+  <section id="contato" class="contato">
+    <h2>Contato</h2>
+    <p>O próximo grande passo da sua marca começa com um "Olá".</p>
+
+    <div class="botoes">
+      <a class="botao whatsapp" href="https://wa.me/5511963666564" target="_blank">
+        WhatsApp
+      </a>
+      <a class="botao email-btn" href="mailto:contato@crashcom.com.br">
+        Enviar E-mail
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© Crash Comunicação • Conexão que gera impacto</p>
+  <p><a href="/privacidade">Política de Privacidade</a></p>
+</footer>
+
+</body>
+</html>
