@@ -288,6 +288,48 @@
       .quem-somos p {
         max-width: 500px;
       }
+
+    /* ================================
+   SEÇÃO O QUE FAZEMOS – FUNDO
+================================ */
+#trabalhos::after {
+  display: none;
+}
+
+#trabalhos {
+  background:
+    linear-gradient(
+      rgba(244, 244, 247, 0.92),
+      rgba(244, 244, 247, 0.92)
+    ),
+    url('1536x1024ima2.png') center / cover no-repeat;
+}
+
+
+/* ================================
+   GRID RESPONSIVO DOS SERVIÇOS
+================================ */
+.servicos {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+  .servicos {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+
+/* ================================
+   BOTÕES DE CONTATO (SEM FULL WIDTH)
+================================ */
+.botoes {
+  align-items: center;
+}
+
+.botoes .botao {
+  width: auto;
+}
     
   </style>
 </head>
@@ -351,12 +393,6 @@
   <div class="servico"><span>🖋️</span>Assinatura de E-mail</div>
 </div>
 
-
-  
-
-  <div class="imagem">
-    <img src="redes2960x960.jpg" alt="Redes sociais2">
-  </div>
 </section>
 
 <section id="contato" class="contato">
@@ -377,4 +413,5 @@
 
 </body>
 </html>
+
 
