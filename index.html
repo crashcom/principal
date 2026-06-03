@@ -108,14 +108,61 @@
       border-radius: 16px;
     }
 
-    .frase {
-      background: var(--roxo);
-      color: var(--branco);
-      text-align: center;
-      padding: 32px 20px;
-      font-size: 22px;
-      font-weight: bold;
-    }
+    /* FAIXA DE IMPACTO EDITADA COM ONLINE/OFFLINE */
+.frase {
+  background: var(--roxo);
+  color: var(--branco);
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 22px;
+  font-weight: bold;
+  
+  /* Alinhamento flexível para os elementos */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Elementos piscantes */
+.pisca-online, .pisca-offline {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: suavePisca 2s infinite ease-in-out;
+}
+
+.pisca-online {
+  color: var(--amarelo);
+  background: rgba(255, 193, 10, 0.12);
+}
+
+.pisca-offline {
+  color: var(--laranja);
+  background: rgba(245, 134, 52, 0.12);
+  animation-delay: 1s; /* Pisca alternado com o Online */
+}
+
+@keyframes suavePisca {
+  0%, 100% { opacity: 0.25; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* Ajuste específico para celulares na seção da frase */
+@media (max-width: 600px) {
+  .frase {
+    flex-direction: column;
+    gap: 12px;
+    font-size: 19px;
+  }
+}
 
     .servicos {
       display: grid;
@@ -454,7 +501,11 @@
   </div>
 </section>
 
-<div class="frase">Nós deixamos a sua marca mais bonita.</div>
+<div class="frase">
+  <span class="pisca-online">● Online</span>
+  <span>Nós deixamos a sua marca mais bonita.</span>
+  <span class="pisca-offline">● Offline</span>
+</div>
 
 <section id="trabalhos">
   <h2>O Que Fazemos</h2>
