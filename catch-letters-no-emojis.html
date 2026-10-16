@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Catch Letters, No Emojis | CrashCom</title>
+<style>
+  :root {
+    --purple: #7a75b5;
+    --orange: #f58634;
+    --yellow: #ffc10a;
+    --ink: #2b2b2b;
+    --paper: #f4f4f7;
+    --white: #fff;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; padding: 12px;
+    background: #f4f4f7;
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .game-shell {
+    width: 100%;
+    max-width: 480px; /* Mobile first dedicado */
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid rgba(122,117,181,.25);
+    border-radius: 20px;
+    background: var(--white);
+    box-shadow: 0 10px 30px rgba(43,43,43,.08);
+  }
+  .game-header { padding: 18px 18px 12px; text-align: center; }
+  .eyebrow {
+    color: var(--purple); font-size: .7rem; font-weight: 800;
+    letter-spacing: .16em; text-transform: uppercase; margin-bottom: 5px;
+  }
+  h1 { margin: 0; font-size: clamp(1.5rem, 6vw, 2.2rem); line-height: 1.1; letter-spacing: -.03em; }
+  h1 span { color: var(--orange); }
+  .intro { margin: 6px 0 0; color: #666477; font-size: .88rem; line-height: 1.4; }
+  .hud {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    padding: 0 16px 14px;
+  }
+  .stat { padding: 10px; background: var(--paper); border-radius: 12px; text-align: center; }
+  .stat-label { display: block; font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #77758b; }
+  .stat-value { display: block; font-size: 1.3rem; font-weight: 850; line-height: 1.2; }
+  .stat-value.score { color: var(--purple); }
+  .arena-wrap { padding: 0 12px; }
+  #arena {
+    display: block; width: 100%; aspect-ratio: 9 / 13; max-height: 520px;
+    border-radius: 14px; background: #fbfaff; touch-action: none;
+    border: 1px solid #eeedf5;
+  }
+  .controls { padding: 14px 18px 18px; }
+  .actions { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+  button {
+    border: 0; border-radius: 14px; padding: 14px 20px;
+    background: var(--purple); color: white; font: inherit; font-weight: 800;
+    cursor: pointer; transition: transform .1s ease, background .1s ease;
+    text-align: center; font-size: 1rem;
+  }
+  button:active { background: #625da0; transform: scale(0.98); }
+  .hint { color: #77758b; font-size: .8rem; line-height: 1.4; text-align: center; }
+  .touch-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .touch-controls button { background: #eeedf7; color: var(--ink); font-size: 1.05rem; padding: 15px; border-radius: 12px; }
+  .touch-controls button:active { background: #dedbf0; }
+  .legend { display: flex; justify-content: space-around; margin-top: 10px; font-size: .78rem; color: #666477; }
+  .legend strong { color: var(--ink); }
+  .message { min-height: 1.3em; margin-top: 8px; color: var(--purple); font-size: .85rem; font-weight: 750; text-align: center; }
+</style>
+</head>
+<body>
+<main class="game-shell" aria-label="Jogo Catch Letters, No Emojis">
+  <header class="game-header">
+    <div class="eyebrow">Mini Game CrashCom</div>
+    <h1>Catch Letters<span>,</span><br>No Emojis</h1>
+    <p class="intro">Pegue as letras e desvie dos emojis!</p>
+  </header>
+  <section class="hud" aria-label="Placar">
+    <div class="stat"><span class="stat-label">Pontos</span><span class="stat-value score" id="score">0</span></div>
+    <div class="stat"><span class="stat-label">Recorde</span><span class="stat-value" id="best">0</span></div>
+    <div class="stat"><span class="stat-label">Tempo</span><span class="stat-value" id="time">45s</span></div>
+  </section>
+  <div class="arena-wrap"><canvas id="arena" width="540" height="780" aria-label="Área do jogo. Arraste ou use os botões para mover o lápis."></canvas></div>
+  <section class="controls">
+    <div class="actions">
+      <button id="startBtn" type="button">Começar Jogo</button>
+      <div class="touch-controls" id="touchPanel" aria-label="Controles de movimento">
+        <button id="leftBtn" type="button">← Esquerda</button>
+        <button id="rightBtn" type="button">Direita →</button>
+      </div>
+      <span class="hint">Arraste o dedo na tela ou use os botões abaixo</span>
+    </div>
+    <div class="legend"><span>🔤 <strong>Letras:</strong> +Pontos</span><span>🙂 <strong>Emojis:</strong> −3 pts</span></div>
+    <div class="message" id="message" role="status" aria-live="polite">Pronto? Toque em Começar!</div>
+  </section>
+</main>
+<script>
+(() => {
+  const canvas = document.getElementById('arena');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const timeEl = document.getElementById('time');
+  const messageEl = document.getElementById('message');
+  const startBtn = document.getElementById('startBtn');
+
+  const W = canvas.width, H = canvas.height;
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const emojiList = ['🙂','😎','😂','😍','🤔','😜','🥳','💩','👻','💖','🔥','💀','👽','🤖','⚡'];
+  let score = 0, best = 0, timeLeft = 45, running = false;
+  let spawnClock = 0, items = [], particles = [];
+  let pointerDown = false, moveDirection = 0, lastTime = 0;
+  
+  // Lápis dimensionado proporcionalmente para a tela mobile
+  const pencil = { x: W / 2, y: H - 70, width: 130, height: 26, speed: 650 };
+
+  try { best = Number(localStorage.getItem('crashCatchLettersBest') || 0); } catch (_) {}
+  bestEl.textContent = best;
+
+  function roundedRect(x, y, w, h, r) {
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+  }
+
+  function drawPencil() {
+    const p = pencil, x = p.x - p.width/2, y = p.y - p.height/2;
+    ctx.save();
+    ctx.globalAlpha = 1.0; // Sem transparência
+    // madeira amarela
+    ctx.fillStyle = '#ffc10a';
+    ctx.beginPath(); ctx.moveTo(x + 15, y); ctx.lineTo(x + p.width - 18, y);
+    ctx.lineTo(x + p.width - 18, y + p.height); ctx.lineTo(x + 15, y + p.height); ctx.closePath(); ctx.fill();
+    
+    // ponta de madeira e grafite
+    ctx.fillStyle = '#dca65d'; ctx.beginPath();
+    ctx.moveTo(x + 15, y); ctx.lineTo(x, y + p.height/2); ctx.lineTo(x + 15, y + p.height); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#33313a'; ctx.beginPath();
+    ctx.moveTo(x, y + p.height/2); ctx.lineTo(x + 7, y + p.height/2 - 4); ctx.lineTo(x + 7, y + p.height/2 + 4); ctx.closePath(); ctx.fill();
+    
+    // corpo com brilho sólido
+    ctx.fillStyle = '#ffdb4d'; ctx.fillRect(x + 18, y + 4, p.width - 38, 4);
+    
+    // ferrule
+    ctx.fillStyle = '#bfc0ca'; ctx.fillRect(x + p.width - 25, y, 9, p.height);
+    
+    // borracha sólida
+    ctx.fillStyle = '#f58634'; roundedRect(x + p.width - 16, y, 16, p.height, 4); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawBackground() {
+    ctx.save();
+    ctx.globalAlpha = 1.0; // 100% opaco
+    ctx.fillStyle = '#fbfaff'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#e6e4f0'; ctx.lineWidth = 1;
+    for (let x = 25; x < W; x += 40) {
+      for (let y = 20; y < H; y += 40) {
+        ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI * 2); ctx.stroke();
+      }
+    }
+    ctx.fillStyle = '#eae7f5'; ctx.fillRect(0, H - 35, W, 35);
+    ctx.restore();
+  }
+
+  function drawItem(item) {
+    ctx.save();
+    ctx.globalAlpha = 1.0; // Garantido totalmente sem transparência
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    
+    if (item.type === 'letter') {
+      ctx.fillStyle = item.color;
+      roundedRect(item.x - 20, item.y - 22, 40, 44, 10); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = '800 24px system-ui, sans-serif'; ctx.fillText(item.value, item.x, item.y + 1);
+      ctx.fillStyle = '#2b2b2b'; ctx.font = '800 12px system-ui, sans-serif'; ctx.fillText('+' + item.points, item.x, item.y + 32);
+    } else {
+      ctx.font = '38px sans-serif';
+      ctx.fillText(item.value, item.x, item.y);
+      ctx.font = '800 12px system-ui, sans-serif'; ctx.fillStyle = '#f58634'; ctx.fillText('−3', item.x, item.y + 28);
+    }
+    ctx.restore();
+  }
+
+  function drawOverlay(title, subtitle) {
+    ctx.save();
+    ctx.globalAlpha = 0.95;
+    ctx.fillStyle = '#f4f4f7'; ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = 1.0;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#7a75b5'; ctx.font = '850 40px system-ui, sans-serif'; ctx.fillText(title, W / 2, H / 2 - 25);
+    ctx.fillStyle = '#2b2b2b'; ctx.font = '600 20px system-ui, sans-serif'; ctx.fillText(subtitle, W / 2, H / 2 + 25);
+    ctx.restore();
+  }
+
+  function render() {
+    drawBackground();
+    items.forEach(drawItem);
+    particles.forEach(p => {
+      ctx.save();
+      ctx.globalAlpha = 1.0; // Partículas 100% sólidas
+      ctx.fillStyle = p.color; ctx.font = '800 20px system-ui, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(p.text, p.x, p.y);
+      ctx.restore();
+    });
+    drawPencil();
+    if (!running) {
+      drawOverlay(timeLeft === 0 ? 'Fim de Jogo!' : 'Catch Letters', timeLeft === 0 ? `Total: ${score} pts` : 'Toque em Começar');
+    }
+  }
+
+  function spawn() {
+    // Dificuldade aumentada: Maior probabilidade de aparecer emojis (50% de chance)
+    const isLetter = Math.random() < 0.50;
+    const x = 30 + Math.random() * (W - 60);
+    items.push({
+      x, y: -30, type: isLetter ? 'letter' : 'emoji',
+      value: isLetter ? letters[Math.floor(Math.random() * letters.length)] : emojiList[Math.floor(Math.random() * emojiList.length)],
+      points: 5 + Math.floor(Math.random() * 6),
+      // Velocidade de queda mais rápida e progressiva
+      speed: 220 + Math.random() * 140 + (45 - timeLeft) * 4.0,
+      color: ['#7a75b5', '#f58634', '#e0a900', '#514b91'][Math.floor(Math.random() * 4)],
+      size: isLetter ? 22 : 24
+    });
+  }
+
+  function burst(x, y, text, color) {
+    particles.push({ x, y: y - 8, text, color, life: .4 });
+  }
+
+  function update(dt) {
+    if (!running) return;
+    timeLeft = Math.max(0, timeLeft - dt);
+    timeEl.textContent = Math.ceil(timeLeft) + 's';
+    
+    pencil.x += moveDirection * pencil.speed * dt;
+    pencil.x = Math.max(pencil.width / 2 + 4, Math.min(W - pencil.width / 2 - 4, pencil.x));
+    
+    spawnClock += dt;
+    // Intervalo de surgimento de itens muito mais curto (maior fluxo e dificuldade)
+    const interval = Math.max(0.22, 0.55 - (45 - timeLeft) * 0.008);
+    if (spawnClock >= interval) { spawnClock = 0; spawn(); }
+
+    for (let i = items.length - 1; i >= 0; i--) {
+      const it = items[i]; it.y += it.speed * dt;
+      const hit = Math.abs(it.x - pencil.x) < pencil.width / 2 + it.size * 0.5 &&
+                  it.y + it.size > pencil.y - pencil.height / 2 &&
+                  it.y - it.size < pencil.y + pencil.height / 2;
+      if (hit) {
+        if (it.type === 'letter') {
+          score += it.points; burst(it.x, it.y, '+' + it.points, '#7a75b5');
+          messageEl.textContent = `Boa! +${it.points} pontos.`;
+        } else {
+          score = Math.max(0, score - 3); burst(it.x, it.y, '−3', '#f58634');
+          messageEl.textContent = 'Ops! Emoji atingido: −3 pontos.';
+        }
+        scoreEl.textContent = score;
+        if (score > best) {
+          best = score; bestEl.textContent = best;
+          try { localStorage.setItem('crashCatchLettersBest', String(best)); } catch (_) {}
+        }
+        items.splice(i, 1);
+      } else if (it.y > H + 40) {
+        items.splice(i, 1);
+      }
+    }
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      particles[i].y -= 40 * dt; particles[i].life -= dt;
+      if (particles[i].life <= 0) particles.splice(i, 1);
+    }
+
+    if (timeLeft <= 0) endGame();
+  }
+
+  function loop(ts) {
+    const dt = Math.min((ts - (lastTime || ts)) / 1000, 0.035); lastTime = ts;
+    update(dt); render();
+    requestAnimationFrame(loop);
+  }
+
+  function startGame() {
+    score = 0; timeLeft = 45; items = []; particles = []; spawnClock = 0;
+    pencil.x = W / 2; running = true; moveDirection = 0;
+    scoreEl.textContent = '0'; timeEl.textContent = '45s';
+    messageEl.textContent = 'Valendo! Cuidado com os emojis!';
+    startBtn.textContent = 'Reiniciar';
+  }
+
+  function endGame() {
+    running = false; timeLeft = 0; timeEl.textContent = '0s'; moveDirection = 0;
+    messageEl.textContent = score >= best && score > 0 ? 'Novo recorde! Excelente!' : 'Fim de jogo. Tente novamente!';
+    startBtn.textContent = 'Jogar Novamente';
+  }
+
+  startBtn.addEventListener('click', startGame);
+
+  // Controles por toque direto no canvas
+  canvas.addEventListener('pointerdown', e => { pointerDown = true; canvas.setPointerCapture(e.pointerId); moveToPointer(e); });
+  canvas.addEventListener('pointermove', e => { if (pointerDown) moveToPointer(e); });
+  canvas.addEventListener('pointerup', () => pointerDown = false);
+  canvas.addEventListener('pointercancel', () => pointerDown = false);
+
+  function moveToPointer(e) {
+    const rect = canvas.getBoundingClientRect();
+    pencil.x = ((e.clientX - rect.left) / rect.width) * W;
+    pencil.x = Math.max(pencil.width / 2 + 4, Math.min(W - pencil.width / 2 - 4, pencil.x));
+  }
+
+  // Controles de botões de toque (Esquerda / Direita)
+  function bindHold(id, dir) {
+    const el = document.getElementById(id);
+    const down = e => { e.preventDefault(); moveDirection = dir; };
+    const up = () => { if (moveDirection === dir) moveDirection = 0; };
+    el.addEventListener('pointerdown', down); el.addEventListener('pointerup', up);
+    el.addEventListener('pointerleave', up); el.addEventListener('pointercancel', up);
+  }
+  bindHold('leftBtn', -1); bindHold('rightBtn', 1);
+
+  // Teclado (para computadores também funcionarem perfeitamente)
+  window.addEventListener('keydown', e => {
+    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(e.key)) e.preventDefault();
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') moveDirection = -1;
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') moveDirection = 1;
+    if ((e.key === ' ' || e.key === 'Enter') && !running) startGame();
+  });
+  window.addEventListener('keyup', e => {
+    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(e.key)) moveDirection = 0;
+  });
+
+  render(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
